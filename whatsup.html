@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en"> 
+ <head> 
+  <meta charset="UTF-8"> 
+  <title>What’s Up</title> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <style>
+    :root {
+      --primary: #007940;
+      --secondary: #f1f1f1;
+      --text: #000;
+      --bubble-sent: #dcf8c6;
+      --bubble-received: #fff;
+    }
+
+    body.dark-mode {
+      --primary: #202c33;
+      --secondary: #0d1418;
+      --text: #fff;
+      --bubble-sent: #056162;
+      --bubble-received: #2a3942;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--secondary);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 450px;
+      margin: 30px auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 90vh;
+      background: var(--secondary);
+    }
+
+    .header {
+      background: var(--primary);
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #fff;
+    }
+
+    .profile-preview {
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-preview video,
+    .profile-preview img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .toggle {
+      cursor: pointer;
+      background: none;
+      border: 1px solid #fff;
+      border-radius: 20px;
+      padding: 5px 10px;
+      font-size: 12px;
+      color: #fff;
+    }
+
+    .chat {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+    }
+
+    .message {
+      max-width: 75%;
+      padding: 10px 14px;
+      margin: 8px 0;
+      border-radius: 18px;
+      display: inline-block;
+      word-wrap: break-word;
+    }
+
+    .sent {
+      background: var(--bubble-sent);
+      align-self: flex-end;
+      margin-left: auto;
+    }
+
+    .received {
+      background: var(--bubble-received);
+      align-self: flex-start;
+      margin-right: auto;
+    }
+
+    .input-area {
+      display: flex;
+      border-top: 1px solid #ccc;
+      padding: 10px;
+      background: var(--secondary);
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+      outline: none;
+      background: var(--bubble-received);
+      color: var(--text);
+    }
+
+    button {
+      margin-left: 8px;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .upload-section {
+      padding: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .upload-section input[type="file"] {
+      font-size: 12px;
+    }
+  </style> 
+ </head> 
+ <body> 
+  <div class="container"> 
+   <div class="header"> 
+    <div class="profile-preview" id="profileDisplay"> 
+     <img src="https://via.placeholder.com/40" alt="profile"> <span>What’s Up</span> 
+    </div> <button class="toggle" onclick="toggleMode()">🌙</button> 
+   </div> 
+   <div class="upload-section"> <label for="upload">Upload Profile GIF/Video:</label> 
+    <input type="file" id="upload" accept="video/mp4,image/gif" onchange="updateProfile(this)"> 
+   </div> 
+   <div class="chat" id="chatBox"> 
+    <div class="message received">
+     Hey Sihle, welcome to What’s Up 💬🔥
+    </div> 
+   </div> 
+   <div class="input-area"> 
+    <input type="text" id="msgInput" placeholder="Type a message 😄"> <button onclick="sendMessage()">Send</button> 
+   </div> 
+  </div> 
+  <script>
+    function toggleMode() {
+      document.body.classList.toggle("dark-mode");
+    }
+
+    function updateProfile(input) {
+      const preview = document.getElementById("profileDisplay");
+      const file = input.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        let element;
+
+        if (file.type.includes("video")) {
+          element = document.createElement("video");
+          element.src = url;
+          element.autoplay = true;
+          element.loop = true;
+          element.muted = true;
+        } else {
+          element = document.createElement("img");
+          element.src = url;
+        }
+
+        element.style.width = "40px";
+        element.style.height = "40px";
+        element.style.borderRadius = "50%";
+        element.style.objectFit = "cover";
+
+        preview.innerHTML = "";
+        preview.appendChild(element);
+        preview.innerHTML += "<span>What’s Up</span>";
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById("msgInput");
+      const chat = document.getElementById("chatBox");
+      const msg = input.value.trim();
+
+      if (msg !== "") {
+        const bubble = document.createElement("div");
+        bubble.className = "message sent";
+        bubble.textContent = msg;
+        chat.appendChild(bubble);
+        input.value = "";
+        chat.scrollTop = chat.scrollHeight;
+
+        setTimeout(() => {
+          const reply = document.createElement("div");
+          reply.className = "message received";
+          reply.textContent = "Aweh! What a vibe 😎";
+          chat.appendChild(reply);
+          chat.scrollTop = chat.scrollHeight;
+        }, 700);
+      }
+    }
+  </script> function sendMessage() {
+  const input = document.getElementById("msgInput");
+  const chat = document.getElementById("chatBox");
+  const msg = input.value.trim();
+
+  if (msg !== "") {
+    // Show the message
+    const bubble = document.createElement("div");
+    bubble.className = "message sent";
+    bubble.textContent = msg;
+    chat.appendChild(bubble);
+    input.value = "";
+    chat.scrollTop = chat.scrollHeight;
+
+    // 🔁 SEND TO BACKEND
+    fetch("https://your-dcoder-url/send-message", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        sender: "Sihle",
+        message: msg
+      })
+    })
+    .then(res =&gt; res.json())
+    .then(data =&gt; {
+      console.log("Server response:", data);
+    });
+  }
+}
+
+ 
+</body></html>
